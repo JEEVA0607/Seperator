@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transaction Extractor</title>
+
+  <!-- Excel/CSV reader -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      color: #172033;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1100px, 94%);
+      margin: 40px auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #667085;
+      font-size: 15px;
+    }
+
+    .upload-box {
+      background: white;
+      border: 2px dashed #b8c2d3;
+      border-radius: 16px;
+      padding: 45px 20px;
+      text-align: center;
+      transition: 0.2s;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(20, 30, 50, 0.05);
+    }
+
+    .upload-box:hover,
+    .upload-box.dragover {
+      border-color: #2563eb;
+      background: #f8fbff;
+    }
+
+    .upload-icon {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    .upload-box h2 {
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    .upload-box p {
+      color: #667085;
+      margin-bottom: 20px;
+    }
+
+    .file-btn {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    .panel {
+      display: none;
+      background: white;
+      margin-top: 25px;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 5px 20px rgba(20, 30, 50, 0.06);
+    }
+
+    .panel.show {
+      display: block;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .file-info {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      padding: 11px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .copy-btn {
+      background: #16a34a;
+      color: white;
+    }
+
+    .copy-btn:hover {
+      background: #15803d;
+    }
+
+    .clear-btn {
+      background: #eef2f7;
+      color: #344054;
+    }
+
+    .clear-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border: 1px solid #e4e7ec;
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #344054;
+      font-size: 13px;
+      text-align: left;
+      padding: 14px;
+      border-bottom: 1px solid #e4e7ec;
+    }
+
+    td {
+      padding: 13px 14px;
+      border-bottom: 1px solid #eef0f3;
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f8fbff;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #667085;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .success {
+      color: #16a34a;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 35px;
+      color: #98a2b3;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px auto;
+      }
+
+      .header h1 {
+        font-size: 25px;
+      }
+
+      .upload-box {
+        padding: 35px 15px;
+      }
+
+      .top-bar {
+        align-items: flex-start;
+      }
+
+      .buttons {
+        width: 100%;
+      }
+
+      button {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="header">
+      <h1>Transaction Extractor</h1>
+      <p>Upload CSV / Excel file and copy only the required transaction details.</p>
+    </div>
+
+    <!-- Upload -->
+    <div class="upload-box" id="uploadBox">
+      <div class="upload-icon">📂</div>
+
+      <h2>Upload CSV or Excel File</h2>
+      <p>Supported formats: CSV, XLSX, XLS</p>
+
+      <label class="file-btn" for="fileInput">
+        Choose File
+      </label>
+
+      <input
+        type="file"
+        id="fileInput"
+        accept=".csv,.xlsx,.xls"
+      />
+    </div>
+
+    <!-- Result Panel -->
+    <div class="panel" id="resultPanel">
+
+      <div class="top-bar">
+
+        <div>
+          <strong>Extracted Transactions</strong>
+          <div class="file-info" id="fileInfo"></div>
+        </div>
+
+        <div class="buttons">
+          <button class="copy-btn" id="copyBtn">
+            📋 Copy All
+          </button>
+
+          <button class="clear-btn" id="clearBtn">
+            ✕ Clear
+          </button>
+        </div>
+
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Transaction Date</th>
+              <th>Username</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+
+          <tbody id="tableBody">
+          </tbody>
+        </table>
+      </div>
+
+      <div class="status" id="status"></div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const fileInput = document.getElementById("fileInput");
+    const uploadBox = document.getElementById("uploadBox");
+    const resultPanel = document.getElementById("resultPanel");
+    const tableBody = document.getElementById("tableBody");
+    const copyBtn = document.getElementById("copyBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const status = document.getElementById("status");
+    const fileInfo = document.getElementById("fileInfo");
+
+    let extractedData = [];
+
+    /*
+      Normalize column names so that small differences
+      like "Transaction Date " or different capitalization
+      won't cause problems.
+    */
+    function normalizeColumnName(name) {
+      return String(name || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+    }
+
+
+    /*
+      Find required column from uploaded file.
+    */
+    function findColumn(headers, requiredName) {
+
+      const target = normalizeColumnName(requiredName);
+
+      return headers.find(header => {
+        return normalizeColumnName(header) === target;
+      });
+
+    }
+
+
+    /*
+      Format Excel date values.
+    */
+    function formatDate(value) {
+
+      if (value === null || value === undefined || value === "") {
+        return "";
+      }
+
+      // If XLSX already converted it to Date
+      if (value instanceof Date && !isNaN(value)) {
+        const day = String(value.getDate()).padStart(2, "0");
+        const month = String(value.getMonth() + 1).padStart(2, "0");
+        const year = value.getFullYear();
+
+        return `${day}-${month}-${year}`;
+      }
+
+      return String(value);
+    }
+
+
+    /*
+      Render extracted data into table.
+    */
+    function renderTable(data) {
+
+      tableBody.innerHTML = "";
+
+      if (!data.length) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="3" class="empty">
+              No transaction data found.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      data.forEach(row => {
+
+        const tr = document.createElement("tr");
+
+        const dateTd = document.createElement("td");
+        dateTd.textContent = row.transactionDate;
+
+        const usernameTd = document.createElement("td");
+        usernameTd.textContent = row.username;
+
+        const amountTd = document.createElement("td");
+        amountTd.textContent = row.amount;
+
+        tr.appendChild(dateTd);
+        tr.appendChild(usernameTd);
+        tr.appendChild(amountTd);
+
+        tableBody.appendChild(tr);
+      });
+    }
+
+
+    /*
+      Process uploaded file.
+    */
+    async function processFile(file) {
+
+      status.textContent = "Reading file...";
+      status.className = "status";
+
+      try {
+
+        const buffer = await file.arrayBuffer();
+
+        const workbook = XLSX.read(buffer, {
+          type: "array",
+          cellDates: true
+        });
+
+        /*
+          Use the first worksheet.
+        */
+        const firstSheetName = workbook.SheetNames[0];
+
+        if (!firstSheetName) {
+          throw new Error("No worksheet found.");
+        }
+
+        const worksheet = workbook.Sheets[firstSheetName];
+
+        /*
+          Convert worksheet to JSON.
+        */
+        const rows = XLSX.utils.sheet_to_json(worksheet, {
+          defval: ""
+        });
+
+        if (!rows.length) {
+          throw new Error("The uploaded file is empty.");
+        }
+
+        const headers = Object.keys(rows[0]);
+
+        /*
+          Find required columns.
+        */
+        const dateColumn = findColumn(headers, "Transaction Date");
+        const usernameColumn = findColumn(headers, "Username");
+        const amountColumn = findColumn(headers, "Amount");
+
+        const missingColumns = [];
+
+        if (!dateColumn) {
+          missingColumns.push("Transaction Date");
+        }
+
+        if (!usernameColumn) {
+          missingColumns.push("Username");
+        }
+
+        if (!amountColumn) {
+          missingColumns.push("Amount");
+        }
+
+        if (missingColumns.length) {
+          throw new Error(
+            "Missing column(s): " + missingColumns.join(", ")
+          );
+        }
+
+        /*
+          Extract ONLY required columns.
+        */
+        extractedData = rows.map(row => {
+
+          return {
+            transactionDate: formatDate(row[dateColumn]),
+            username: String(row[usernameColumn] ?? ""),
+            amount: String(row[amountColumn] ?? "")
+          };
+
+        });
+
+        renderTable(extractedData);
+
+        resultPanel.classList.add("show");
+
+        fileInfo.textContent =
+          `${file.name} • ${extractedData.length} transaction(s)`;
+
+        status.textContent =
+          `Successfully extracted ${extractedData.length} transaction(s).`;
+
+        status.className = "status success";
+
+      } catch (error) {
+
+        resultPanel.classList.add("show");
+
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="3" class="empty">
+              Unable to process this file.
+            </td>
+          </tr>
+        `;
+
+        status.textContent = error.message;
+        status.className = "status error";
+      }
+    }
+
+
+    /*
+      File selected.
+    */
+    fileInput.addEventListener("change", function () {
+
+      const file = this.files[0];
+
+      if (file) {
+        processFile(file);
+      }
+    });
+
+
+    /*
+      Drag & Drop.
+    */
+    uploadBox.addEventListener("dragover", function (event) {
+
+      event.preventDefault();
+
+      uploadBox.classList.add("dragover");
+    });
+
+
+    uploadBox.addEventListener("dragleave", function () {
+
+      uploadBox.classList.remove("dragover");
+    });
+
+
+    uploadBox.addEventListener("drop", function (event) {
+
+      event.preventDefault();
+
+      uploadBox.classList.remove("dragover");
+
+      const file = event.dataTransfer.files[0];
+
+      if (file) {
+        processFile(file);
+      }
+    });
+
+
+    /*
+      Copy ONLY the 3 required columns.
+
+      TAB-separated format is used so that
+      the copied content can be pasted directly
+      into Excel / Google Sheets.
+    */
+    copyBtn.addEventListener("click", async function () {
+
+      if (!extractedData.length) {
+        status.textContent = "Nothing to copy.";
+        status.className = "status error";
+        return;
+      }
+
+      const header =
+        "Transaction Date\tUsername\tAmount";
+
+      const rows = extractedData.map(row => {
+
+        return [
+          row.transactionDate,
+          row.username,
+          row.amount
+        ].join("\t");
+
+      });
+
+      const text = [header, ...rows].join("\n");
+
+      try {
+
+        await navigator.clipboard.writeText(text);
+
+        copyBtn.textContent = "✓ Copied!";
+
+        status.textContent =
+          `${extractedData.length} transaction(s) copied successfully.`;
+
+        status.className = "status success";
+
+        setTimeout(() => {
+          copyBtn.textContent = "📋 Copy All";
+        }, 2000);
+
+      } catch (error) {
+
+        /*
+          Fallback for browsers where Clipboard API
+          is unavailable.
+        */
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        textarea.remove();
+
+        copyBtn.textContent = "✓ Copied!";
+
+        status.textContent = "Data copied successfully.";
+        status.className = "status success";
+
+        setTimeout(() => {
+          copyBtn.textContent = "📋 Copy All";
+        }, 2000);
+      }
+    });
+
+
+    /*
+      Clear everything.
+    */
+    clearBtn.addEventListener("click", function () {
+
+      extractedData = [];
+
+      tableBody.innerHTML = "";
+
+      resultPanel.classList.remove("show");
+
+      fileInput.value = "";
+
+      status.textContent = "";
+      fileInfo.textContent = "";
+    });
+
+  </script>
+
+</body>
+</html>
