@@ -574,20 +574,16 @@
         return;
       }
 
-      const header =
-        "Transaction Date\tUsername\tAmount";
-
       const rows = extractedData.map(row => {
+  return [
+    row.transactionDate,
+    row.username,
+    row.amount
+  ].join("\t");
+});
 
-        return [
-          row.transactionDate,
-          row.username,
-          row.amount
-        ].join("\t");
+const text = rows.join("\n");
 
-      });
-
-      const text = [header, ...rows].join("\n");
 
       try {
 
