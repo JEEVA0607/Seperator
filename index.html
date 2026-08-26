@@ -1343,7 +1343,7 @@
 
         if (!workbook.SheetNames.length) {
           throw new Error(
-            "Worksheet കണ്ടെത്താൻ കഴിഞ്ഞില്ല."
+            "Couldn’t find the worksheet."
           );
         }
 
@@ -1366,7 +1366,7 @@
 
         if (!rows.length) {
           throw new Error(
-            "Uploaded file empty ആണ്."
+            "The uploaded file is empty."
           );
         }
 
@@ -1569,7 +1569,7 @@
         } else {
 
           showToast(
-            "Duplicate transactions ഒന്നും കണ്ടെത്തിയില്ല.",
+            "Duplicate transactions Not Found.",
             "success"
           );
         }
@@ -1584,7 +1584,7 @@
 
         if (!extractedData.length) {
           showToast(
-            "ആദ്യം ഒരു file upload ചെയ്യുക.",
+            "First Upload the File.",
             "error"
           );
           return;
@@ -1608,8 +1608,8 @@
 
           showToast(
             count
-              ? `${count} duplicate transactions കാണിക്കുന്നു.`
-              : "Duplicate transactions ഒന്നും ഇല്ല.",
+              ? `${count} duplicate transactions.`
+              : "Duplicate transactions not found.",
             count ? "warning" : "success"
           );
 
@@ -1621,7 +1621,7 @@
             "🔄 Find Duplicates";
 
           showToast(
-            "എല്ലാ transactions-ഉം കാണിക്കുന്നു.",
+            "Show all transactions.",
             "info"
           );
         }
@@ -1638,7 +1638,7 @@
       if (!rows.length) {
 
         showToast(
-          "Copy ചെയ്യാൻ transactions ഇല്ല.",
+          "There are no transactions to copy.",
           "error"
         );
 
@@ -1725,7 +1725,7 @@
         if (!filteredData.length) {
 
           showToast(
-            "Export ചെയ്യാൻ transactions ഇല്ല.",
+            "There are no transactions to export.",
             "error"
           );
 
@@ -1839,7 +1839,7 @@
         applyFilters();
 
         showToast(
-          "Filters reset ചെയ്തു.",
+          "The filters have been reset.",
           "info"
         );
       }
@@ -1993,7 +1993,7 @@
         updateDashboard([]);
 
         showToast(
-          "എല്ലാ data-യും clear ചെയ്തു.",
+          "All data has been cleared.",
           "info"
         );
       }
