@@ -539,6 +539,40 @@
         width: 100%;
       }
     }
+  /* Withdrawal Notice */
+.withdrawal-notice {
+  width: 100%;
+  background: #3f3f3f;
+  border: 1px solid #555;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 15px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.withdrawal-notice-track {
+  white-space: nowrap;
+  display: inline-block;
+  padding-left: 100%;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  animation: withdrawalScroll 18s linear infinite;
+}
+
+@keyframes withdrawalScroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+    
   </style>
 </head>
 
@@ -566,6 +600,13 @@
       <p>
         Upload CSV / Excel file and copy only the required transaction details.
       </p>
+
+      <div class="withdrawal-notice">
+        <div class="withdrawal-notice-track">
+    Upload the withdrawal file separately for each date. Each file should contain the date, username, and withdrawal amount.
+  </div>
+</div>
+
     </div>
 
     <!-- Upload -->
