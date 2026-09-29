@@ -916,6 +916,294 @@ body.dark ::-webkit-scrollbar-thumb {
     margin-bottom: 12px;
 }
 
+/* =========================================================
+   NEW APP LAYOUT
+========================================================= */
+
+body {
+    overflow-x: hidden;
+}
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* LEFT SIDEBAR */
+
+.action-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 220px;
+    padding: 24px 14px;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    box-shadow: 4px 0 20px rgba(15, 23, 42, 0.06);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-title {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 800;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.sidebar-actions button {
+    width: 100%;
+    min-height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px 13px;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 750;
+    text-align: left;
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+    width: calc(100% - 220px);
+    margin-left: 220px;
+}
+
+/* HEADER */
+
+.header {
+    margin-bottom: 0;
+    padding: 25px 170px 0 25px;
+}
+
+.header h1 {
+    margin-bottom: 5px;
+}
+
+.header p {
+    margin-bottom: 0;
+}
+
+/* UPLOAD BUTTON IN HEADER */
+
+.header-upload {
+    position: absolute;
+    right: 25px;
+    top: 25px;
+}
+
+.header-upload .file-btn {
+    min-width: 125px;
+    padding: 10px 14px;
+}
+
+/* RUNNING NOTICE */
+
+.withdrawal-notice {
+    width: calc(100% + 25px);
+    margin-left: -25px;
+    margin-top: 18px;
+    border-radius: 0;
+    height: 38px;
+}
+
+/* STATS BAR */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    overflow: hidden;
+}
+
+.dashboard .stat-card {
+    min-height: 82px;
+    padding: 13px 16px;
+    border: 0;
+    border-right: 1px solid var(--border);
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.dashboard .stat-card:last-child {
+    border-right: 0;
+}
+
+.dashboard .stat-card .icon {
+    display: none;
+}
+
+.dashboard .stat-card .label {
+    margin-bottom: 4px;
+}
+
+.dashboard .stat-card .value {
+    font-size: 19px;
+}
+
+/* HIDE UNIQUE USERS CARD */
+
+.dashboard .stat-card:last-child {
+    display: none;
+}
+
+/* PANELS */
+
+.main-content .panel {
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+/* RESULT PANEL */
+
+#resultPanel {
+    margin-top: 18px;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+    .action-sidebar {
+        width: 185px;
+    }
+
+    .main-content {
+        width: calc(100% - 185px);
+        margin-left: 185px;
+    }
+
+    .dashboard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .dashboard .stat-card {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .dashboard .stat-card:nth-child(3) {
+        border-right: 0;
+    }
+
+    .dashboard .stat-card:nth-child(4),
+    .dashboard .stat-card:nth-child(5) {
+        border-bottom: 0;
+    }
+
+    .header {
+        padding-right: 150px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .app-layout {
+        display: block;
+    }
+
+    .action-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 12px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-title {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    .sidebar-actions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .sidebar-actions button {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .main-content {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .header {
+        padding: 20px 15px 0;
+    }
+
+    .header-upload {
+        position: static;
+        margin-top: 15px;
+    }
+
+    .header-upload .file-btn {
+        width: 100%;
+    }
+
+    .withdrawal-notice {
+        width: calc(100% + 30px);
+        margin-left: -15px;
+    }
+
+    .main-content .panel {
+        margin-left: 12px;
+        margin-right: 12px;
+    }
+
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard .stat-card {
+        border-right: 1px solid var(--border);
+    }
+
+    .dashboard .stat-card:nth-child(even) {
+        border-right: 0;
+    }
+}
+
+@media (max-width: 430px) {
+
+    .sidebar-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .dashboard .stat-card {
+        min-height: 70px;
+        padding: 10px;
+    }
+
+    .dashboard .stat-card .value {
+        font-size: 16px;
+    }
+}
+
+
 
   </style>
 </head>
@@ -934,226 +1222,345 @@ body.dark ::-webkit-scrollbar-thumb {
 
   <div class="toast-container" id="toastContainer"></div>
 
-  <div class="container">
+<div class="app-layout">
 
-    <div class="header">
-      <button class="theme-btn" id="themeBtn">🌙 Dark</button>
+    <!-- LEFT SIDEBAR -->
+    <aside class="action-sidebar">
 
-      <h1>Transaction Extractor</h1>
+        <div class="sidebar-title">
+            ⚡ Actions
+        </div>
 
-      <p>
-        Upload CSV / Excel file and copy only the required transaction details.
-      </p>
+        <div class="sidebar-actions">
 
-      <div class="withdrawal-notice">
-        <div class="withdrawal-notice-track">
-    Upload your transaction file, and the system will automatically extract only the required details from it — Transaction Date, Username, and Amount — and display them separately in a clean and organized format for easy viewing, copying, and further use.
-  </div>
-</div>
-
-    </div>
-
-    <!-- Upload -->
-
-    <div class="upload-box" id="uploadBox">
-
-      <div class="upload-icon">📂</div>
-
-      <h2>Upload CSV or Excel File</h2>
-
-      <p>
-        Supported formats: CSV, XLSX, XLS
-      </p>
-
-      <label class="file-btn" for="fileInput">
-        Choose File
+          <label class="sidebar-upload file-btn" for="fileInput">
+        📂 Upload File
       </label>
 
       <input
         type="file"
         id="fileInput"
         accept=".csv,.xlsx,.xls"
-      />
+    />
 
-    </div>
+            <button class="copy-btn" id="copyBtn">
+                📋 Copy All
+            </button>
 
-    <!-- Dashboard -->
+            <button class="copy-btn" id="copySelectedBtn">
+                ☑ Copy Selected
+            </button>
 
-    <div class="panel" id="dashboardPanel">
+            <button class="export-btn" id="exportBtn">
+                📥 Export CSV
+            </button>
 
-      <div class="dashboard">
+            <button class="duplicate-btn" id="duplicateBtn">
+                🔄 Find Duplicates
+            </button>
 
-        <div class="stat-card">
-          <div class="icon">📊</div>
-          <div class="label">Transactions</div>
-          <div class="value" id="totalTransactions">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="icon">💰</div>
-          <div class="label">Total Amount</div>
-          <div class="value" id="totalAmount">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="icon">📈</div>
-          <div class="label">Average Amount</div>
-          <div class="value" id="averageAmount">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="icon">⬆️</div>
-          <div class="label">Highest Amount</div>
-          <div class="value" id="highestAmount">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="icon">⬇️</div>
-          <div class="label">Lowest Amount</div>
-          <div class="value" id="lowestAmount">0</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="icon">👤</div>
-          <div class="label">Unique Users</div>
-          <div class="value" id="uniqueUsers">0</div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Results -->
-
-    <div class="panel" id="resultPanel">
-
-      <div class="top-bar">
-
-        <div>
-          <strong>Extracted Transactions</strong>
-          <div class="file-info" id="fileInfo"></div>
-        </div>
-
-        <div class="buttons">
-
-          <button class="copy-btn" id="copyBtn">
-            📋 Copy All
-          </button>
-
-          <button class="copy-btn" id="copySelectedBtn">
-            ☑ Copy Selected
-          </button>
-
-          <button class="export-btn" id="exportBtn">
-            📥 Export CSV
-          </button>
-
-          <button class="duplicate-btn" id="duplicateBtn">
-            🔄 Find Duplicates
-          </button>
-
-          <button class="clear-btn" id="clearBtn">
-            ✕ Clear
-          </button>
+            <button class="clear-btn" id="clearBtn">
+                ✕ Clear
+            </button>
 
         </div>
 
-      </div>
+    </aside>
 
-      <!-- Filters -->
 
-      <div class="filters">
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
 
-        <input
-          class="input search-box"
-          id="searchInput"
-          type="text"
-          placeholder="🔎 Search username / date / amount..."
-        />
+        <div class="container">
 
-        <input
-          class="input"
-          id="fromDate"
-          type="date"
-          title="From date"
-        />
+            <!-- HEADER -->
 
-        <input
-          class="input"
-          id="toDate"
-          type="date"
-          title="To date"
-        />
+            <div class="header">
 
-        <input
-          class="input"
-          id="minAmount"
-          type="number"
-          placeholder="Min Amount"
-        />
+                <button class="theme-btn" id="themeBtn">
+                    🌙 Dark
+                </button>
 
-        <button class="filter-reset" id="resetFilters">
-          Reset
-        </button>
+                <!-- UPLOAD TOP RIGHT -->
 
-      </div>
+                <h1>Transaction Extractor</h1>
 
-      <div class="table-wrapper">
+                <p>
+                    Upload CSV / Excel file and copy only the required
+                    transaction details.
+                </p>
 
-        <table>
 
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  class="checkbox"
-                  id="selectAll"
-                />
-                <div style="font-size:11px; margin-top:4px;">Select All</div>
-              </th>
+                <!-- RUNNING TEXT -->
 
-              <th>Transaction Date</th>
-              <th>Username</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
+                <div class="withdrawal-notice">
 
-          <tbody id="tableBody"></tbody>
+                    <div class="withdrawal-notice-track">
+                        Upload your transaction file, and the system will
+                        automatically extract only the required details —
+                        Transaction Date, Username, and Amount — and display
+                        them separately in a clean and organized format for
+                        easy viewing, copying, and further use.
+                    </div>
 
-        </table>
+                </div>
 
-      </div>
+            </div>
 
-      <div class="pagination">
 
-        <div class="page-info" id="pageInfo">
-          0 transactions
+            <!-- DASHBOARD -->
+
+            <div class="panel" id="dashboardPanel">
+
+                <div class="dashboard">
+
+                    <div class="stat-card">
+
+                        <div class="label">
+                            Transactions
+                        </div>
+
+                        <div class="value"
+                             id="totalTransactions">
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="label">
+                            Total Amount
+                        </div>
+
+                        <div class="value"
+                             id="totalAmount">
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="label">
+                            Average Amount
+                        </div>
+
+                        <div class="value"
+                             id="averageAmount">
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="label">
+                            Highest Amount
+                        </div>
+
+                        <div class="value"
+                             id="highestAmount">
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="label">
+                            Lowest Amount
+                        </div>
+
+                        <div class="value"
+                             id="lowestAmount">
+                            0
+                        </div>
+
+                    </div>
+
+
+                    <!-- Kept for JavaScript compatibility -->
+                    <div class="stat-card">
+
+                        <div class="label">
+                            Unique Users
+                        </div>
+
+                        <div class="value"
+                             id="uniqueUsers">
+                            0
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <div class="panel" id="resultPanel">
+
+                <div class="top-bar">
+
+                    <div>
+
+                        <strong>
+                            Extracted Transactions
+                        </strong>
+
+                        <div
+                            class="file-info"
+                            id="fileInfo">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FILTERS -->
+
+                <div class="filters">
+
+                    <input
+                        class="input search-box"
+                        id="searchInput"
+                        type="text"
+                        placeholder="🔎 Search username / date / amount..."
+                    />
+
+                    <input
+                        class="input"
+                        id="fromDate"
+                        type="date"
+                        title="From date"
+                    />
+
+                    <input
+                        class="input"
+                        id="toDate"
+                        type="date"
+                        title="To date"
+                    />
+
+                    <input
+                        class="input"
+                        id="minAmount"
+                        type="number"
+                        placeholder="Min Amount"
+                    />
+
+                    <button
+                        class="filter-reset"
+                        id="resetFilters">
+                        Reset
+                    </button>
+
+                </div>
+
+
+                <!-- TABLE -->
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+
+                                    <input
+                                        type="checkbox"
+                                        class="checkbox"
+                                        id="selectAll"
+                                    />
+
+                                    <div
+                                        style="
+                                        font-size:11px;
+                                        margin-top:4px;
+                                        ">
+                                        Select All
+                                    </div>
+
+                                </th>
+
+                                <th>
+                                    Transaction Date
+                                </th>
+
+                                <th>
+                                    Username
+                                </th>
+
+                                <th>
+                                    Amount
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="tableBody"></tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- PAGINATION -->
+
+                <div class="pagination">
+
+                    <div
+                        class="page-info"
+                        id="pageInfo">
+                        0 transactions
+                    </div>
+
+                    <div class="page-buttons">
+
+                        <button id="prevPage">
+                            ←
+                        </button>
+
+                        <button
+                            id="pageNumber"
+                            class="active">
+                            1
+                        </button>
+
+                        <button id="nextPage">
+                            →
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="status"
+                    id="status">
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="page-buttons">
+    </main>
 
-          <button id="prevPage">
-            ←
-          </button>
+</div>
 
-          <button id="pageNumber" class="active">
-            1
-          </button>
-
-          <button id="nextPage">
-            →
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="status" id="status"></div>
-
-    </div>
-
-  </div>
 
   <script>
 
@@ -1210,6 +1617,9 @@ body.dark ::-webkit-scrollbar-thumb {
     const rowsPerPage = 25;
 
     let duplicateMode = false;
+    let isSelecting = false;
+    let selectionMode = false;
+
 
 
     /* =========================
@@ -1566,6 +1976,21 @@ function dateToComparable(value) {
     }
 
 
+    function setRowSelection(row, checkbox, tr, selected) {
+
+    row.selected = selected;
+
+    checkbox.checked = selected;
+
+    tr.classList.toggle(
+        "selected",
+        selected
+    );
+
+    updateSelectAllState();
+}
+
+
     /* =========================
        RENDER TABLE
     ========================= */
@@ -1630,21 +2055,37 @@ function dateToComparable(value) {
           checkbox.className = "checkbox";
           checkbox.checked = !!row.selected;
 
-          checkbox.addEventListener(
-            "change",
-            function () {
+         checkbox.addEventListener("mousedown", function (event) {
 
-              row.selected =
-                checkbox.checked;
+    event.preventDefault();
 
-              tr.classList.toggle(
-                "selected",
-                checkbox.checked
-              );
+    isSelecting = true;
 
-              updateSelectAllState();
-            }
-          );
+    selectionMode = !row.selected;
+
+    setRowSelection(
+        row,
+        checkbox,
+        tr,
+        selectionMode
+    );
+});
+
+
+checkbox.addEventListener("mouseenter", function () {
+
+    if (!isSelecting) {
+        return;
+    }
+
+    setRowSelection(
+        row,
+        checkbox,
+        tr,
+        selectionMode
+    );
+});
+
 
           checkboxTd.appendChild(checkbox);
 
@@ -2420,6 +2861,13 @@ function dateToComparable(value) {
         );
       }
     );
+
+    document.addEventListener("mouseup", function () {
+
+    isSelecting = false;
+
+});
+
 
   </script>
 
