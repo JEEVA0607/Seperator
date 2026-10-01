@@ -2747,98 +2747,74 @@ checkbox.addEventListener("change", function () {
 
 
     /* =========================
-       DRAG & DROP
-    ========================= */
-
-    uploadBox.addEventListener(
-      "dragover",
-      function (event) {
-
-        event.preventDefault();
-
-        uploadBox.classList.add(
-          "dragover"
-        );
-      }
-    );
-
-
-    uploadBox.addEventListener(
-      "dragleave",
-      function () {
-
-        uploadBox.classList.remove(
-          "dragover"
-        );
-      }
-    );
-
-
-    uploadBox.addEventListener(
-      "drop",
-      function (event) {
-
-        event.preventDefault();
-
-        uploadBox.classList.remove(
-          "dragover"
-        );
-
-        const file =
-          event.dataTransfer.files[0];
-
-        if (file) {
-          processFile(file);
-        }
-      }
-    );
-
-
-    /* =========================
        CLEAR
     ========================= */
 
-    clearBtn.addEventListener(
-      "click",
-      function () {
+clearBtn.addEventListener("click", function () {
 
-        extractedData = [];
-        filteredData = [];
+    // Clear all stored transaction data
+    extractedData = [];
+    filteredData = [];
 
-        currentPage = 1;
-        duplicateMode = false;
+    // Reset pagination
+    currentPage = 1;
 
-        tableBody.innerHTML = "";
+    // Reset duplicate mode
+    duplicateMode = false;
 
-        resultPanel.classList.remove(
-          "show"
-        );
+    // Reset selection states
+    isSelecting = false;
+    selectionMode = false;
 
-        dashboardPanel.classList.remove(
-          "show"
-        );
+    // Clear table
+    tableBody.innerHTML = "";
 
-        fileInput.value = "";
+    // Hide result/dashboard panels
+    resultPanel.classList.remove("show");
+    dashboardPanel.classList.remove("show");
 
-        searchInput.value = "";
-        fromDate.value = "";
-        toDate.value = "";
-        minAmount.value = "";
+    // Reset file input
+    fileInput.value = "";
 
-        fileInfo.textContent = "";
-        status.textContent = "";
+    // Reset filters
+    searchInput.value = "";
+    fromDate.value = "";
+    toDate.value = "";
+    minAmount.value = "";
 
-        duplicateBtn.textContent =
-          "🔄 Find Duplicates";
+    // Reset file information
+    fileInfo.textContent = "";
 
-        updateDashboard([]);
+    // Reset status
+    status.textContent = "";
+    status.className = "status";
 
-        showToast(
-          "All data has been cleared.",
-          "info"
-        );
-      }
+    // Reset select-all checkbox
+    selectAll.checked = false;
+
+    // Reset pagination UI
+    pageInfo.textContent = "0 transactions";
+    pageNumber.textContent = "1";
+    prevPage.disabled = true;
+    nextPage.disabled = true;
+
+    // Reset dashboard values
+    totalTransactions.textContent = "0";
+    totalAmount.textContent = "0";
+    averageAmount.textContent = "0";
+    highestAmount.textContent = "0";
+    lowestAmount.textContent = "0";
+    uniqueUsers.textContent = "0";
+
+    // Reset duplicate button
+    duplicateBtn.textContent = "🔄 Find Duplicates";
+
+    showToast(
+        "All data has been cleared.",
+        "success"
     );
+});
+
 
 
   </script>
