@@ -1427,6 +1427,15 @@ body {
 
                 <!-- FILTERS -->
 
+                <textarea
+    class="input"
+    id="excludeNames"
+    placeholder="Paste names here...&#10;One name per line"
+    rows="4"
+    style="height:90px; resize:vertical;"
+    ></textarea>
+
+
                 <div class="filters">
 
                     <input
@@ -1608,6 +1617,8 @@ body {
     const highestAmount = document.getElementById("highestAmount");
     const lowestAmount = document.getElementById("lowestAmount");
     const uniqueUsers = document.getElementById("uniqueUsers");
+    const excludeNames = document.getElementById("excludeNames");
+
 
 
     let extractedData = [];
@@ -1921,7 +1932,23 @@ function dateToComparable(value) {
       const minimum =
         parseFloat(minAmount.value);
 
+        const excludedNames = new Set(
+    excludeNames.value
+        .split(/\r?\n/)
+        .map(name => name.trim().toLowerCase())
+        .filter(Boolean)
+);
+
+
       filteredData = extractedData.filter(row => {
+
+        if (
+          excludedNames.size &&
+          excludedNames.has(row.username.trim().toLowerCase())
+          ) {
+        return false;
+      }
+
 
         const searchable = [
           row.transactionDate,
@@ -2662,6 +2689,11 @@ checkbox.addEventListener("change", function () {
       applyFilters
     );
 
+    excludeNames.addEventListener(
+  "input",
+  applyFilters
+);
+
 
     resetFilters.addEventListener(
       "click",
@@ -2781,6 +2813,9 @@ clearBtn.addEventListener("click", function () {
     fromDate.value = "";
     toDate.value = "";
     minAmount.value = "";
+    
+    excludeNames.value = "";
+
 
     // Reset file information
     fileInfo.textContent = "";
