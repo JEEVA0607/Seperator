@@ -1617,8 +1617,6 @@ body {
     const rowsPerPage = 25;
 
     let duplicateMode = false;
-    let isSelecting = false;
-    let selectionMode = false;
 
 
 
@@ -2055,35 +2053,15 @@ function dateToComparable(value) {
           checkbox.className = "checkbox";
           checkbox.checked = !!row.selected;
 
-         checkbox.addEventListener("mousedown", function (event) {
-
-    event.preventDefault();
-
-    isSelecting = true;
-
-    selectionMode = !row.selected;
+checkbox.addEventListener("change", function () {
 
     setRowSelection(
         row,
         checkbox,
         tr,
-        selectionMode
+        checkbox.checked
     );
-});
 
-
-checkbox.addEventListener("mouseenter", function () {
-
-    if (!isSelecting) {
-        return;
-    }
-
-    setRowSelection(
-        row,
-        checkbox,
-        tr,
-        selectionMode
-    );
 });
 
 
@@ -2861,12 +2839,6 @@ checkbox.addEventListener("mouseenter", function () {
         );
       }
     );
-
-    document.addEventListener("mouseup", function () {
-
-    isSelecting = false;
-
-});
 
 
   </script>
